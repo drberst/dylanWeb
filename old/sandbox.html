@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Untitled Document</title>
+<link href="css/style.css" rel="stylesheet" type="text/css">
+</head>
+	<style> 
+
+
+		#left,#right {
+		display: inline;
+		margin: 0;
+		left: 500px;
+        top: -300px;
+		font-size: 30px;
+		position: absolute;
+	}
+	#box {
+		width: 15px;
+		height: 15px;
+		background-color: white;
+		margin:0;
+		z-index: 1;
+        left: 950px;
+        top: 300px;
+
+		position: absolute;
+	}
+
+
+	</style>
+
+	<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+
+
+	<body>
+    <div id="header">
+    	Press a key
+    </div>
+    <div id="navbar">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="gifsync.html">Gif Sync</a></li>
+                <li><a href="euler.html">Euler Problems</a></li>
+                <li><a href="sandbox.html">Sandbox</a></li>
+            </ul>
+            </div>
+		<br>
+	<div id="container">
+    
+        <div id="box">
+
+        </div>
+		
+
+		
+
+
+
+
+
+
+
+	</div>
+
+
+
+
+
+	<script type="text/javascript">
+	$(this).keydown(function(){
+		var left = $('#box').clone(true);
+		//left.attr("id","left");
+		//left.html("|");
+		var right = $('#box').clone(true);
+		var down = $('#box').clone(true);
+		var up = $('#box').clone(true);
+		//right.attr("id","right");
+		//right.html("|");
+		var time = 5000;
+		var delay = 2700;
+		right.appendTo("#container").animate({
+					left:'+=615px'
+			},{queue:false,duration:time,easing:'linear'}).delay(delay)
+		.animate({
+			opacity:0
+		},300,function(){$(this).remove();});
+		
+		left.appendTo("#container").animate({
+					left:'-=615px'
+			},{queue:false,duration:time,easing:'linear'}).delay(delay)
+		.animate({
+			opacity:0
+		},300,function(){$(this).remove();});
+		
+		down.appendTo("#container").animate({
+					top:'+=615px'
+			},{queue:false,duration:time,easing:'linear'}).delay(delay)
+		.animate({
+			opacity:0
+		},300,function(){$(this).remove();});
+		up.appendTo("#container").animate({
+					top:'-=615px'
+			},{queue:false,duration:time,easing:'linear'}).delay(delay)
+		.animate({
+			opacity:0
+		},300,function(){$(this).remove();});
+
+
+	});
+
+	$(document).ready(function(){
+		 
+		
+		//$("#box").clone(true).appendTo("#container").css("float","right");
+			
+
+
+			// $($clone).animate({
+			// 	opacity: .5,
+			// 	left: '+=100px'
+
+			// },300,function(){});
+
+			// $('#book').animate({
+			//     opacity: 0.25,
+			//     left: '+=50',
+			//     height: 'toggle'
+			//   }, 5000, function() {
+			//     // Animation complete.
+			//   });
+	});
+	</script>
+
+
+	</body>
+</html>
+    
+    
+    </div>
+</body>
+</html>

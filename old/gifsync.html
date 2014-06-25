@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Gif Sync</title>   
+        <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="js/plugins.js"></script>
+		<link href="css/style.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div id="header">Tap a key in time with your music</div>
+        <div id="navbar">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="gifsync.html">Gif Sync</a></li>
+                <li><a href="euler.html">Euler Problems</a></li>
+                <li><a href="sandbox.html">Sandbox</a></li>
+            </ul>
+            </div>
+		<br>
+
+
+
+        <div id="container">
+        
+        
+        <div id="tempo">
+          <img src="img/up.png" width="128" height="50" alt=""></img>
+        </div>
+		<div id='bpm'>Tempo</div>
+        
+        <div id="menu" class="inlaid menu left">
+            <ul>
+                <li id="gandalf"><a>Gandalf</a></li>
+                <li id="jayandbob"><a>Jay and Bob</a></li>
+                <li id="thisguy"><a>This Guy</a></li>
+                <li id="jake"><a>Jake</a></li>
+                <li id="daftpunk"><a>Daft Punk</a></li>
+                <li id="BMO"><a>BMO</a></li>
+                <li id="busters"><a>Mythbusters</a></li>
+                <li id="house"><a>House</a></li>
+                <li id="gru"><a>Gru</a></li>
+                <li id='lastSupper'><a>The Last Supper</a></li>
+                <li id='sherlock'><a>Sherlock</a></li>
+            </ul>
+            </div>
+            <div id="speeds" class="inlaid menu right">
+            <ul>
+                <li id="double"><a>Double Speed</a></li>
+                <li id="half"><a>Half Speed</a></li>
+                <li id="reset"><a>Reset</a></li>
+            </ul>
+            </div>
+
+       
+        <div class='gandalf gif center'></div>
+        <div class='jayandbob gif center'></div>
+        <div class='thisguy gif center'></div>
+        <div class='jake gif center'></div>
+        <div class='daftpunk gif center'></div>
+        <div class='BMO gif center'></div>
+        <div class='busters gif center'></div> 
+        <div class='house gif center'></div> 
+        <div class='gru gif center'></div> 
+        <div class='lastSupper gif center'></div>
+        <div class='sherlock gif center'></div>
+
+
+
+        
+       
+        <script type="text/javascript">
+		$(document).ready(function(e) {
+                ALLOFIT(".gandalf",11,1);
+        });
+
+		var ALLOFIT = function(aTarget,aFrames,aSlow){
+			var $IMAGES = [
+			{name:".gandalf",frames:11,slow:1},
+			{name:".jayandbob",frames:30,slow:4},
+			{name:".thisguy",frames:19,slow:1},
+			{name:".jake",frames:16,slow:2},
+			{name:".daftpunk",frames:12,slow:1},
+			{name:".BMO",frames:10,slow:2},
+			{name:".busters",frames:17,slow:4},
+			{name:".house",frames:7,slow:1},
+			{name:".gru",frames:10,slow:2},
+			{name:".lastSupper",frames:37,slow:4},
+			{name:".sherlock",frames:5,slow:1}
+		];
+			
+			$("#menu ul li").click(function() {
+				var name = this.id;
+				console.log("." + name);
+
+				changeGif("." + name);
+			});
+			
+			var count = 0;
+			var firstRun = 1;
+			var total = 0;
+			var other = 0;
+			var speed = 1000;
+			var target = aTarget;
+			var frames = aFrames;
+			var expire = 0;
+			var slow = aSlow;
+			$(target).animateSprite({
+                    columns: aFrames,
+                    totalFrames: aFrames,
+                    loop: true,
+            });
+			$(".gif").css("display","none");
+			$(target).css("display","block");
+		var changeGif = function(newGif) {
+			
+			console.log("old target:" + target);
+			$(target).animateSprite("stopAnimation");
+			$(target).css("display","none");
+			gif = findGif(newGif);
+			target = gif.name;
+			console.log("new target:" + target);
+			$(target).css("display","block")
+			slow = gif.slow;
+			frames = gif.frames;
+			$(target).animateSprite({
+				columns: frames,
+				totalFrames: frames,
+				loop: true,
+			 });
+			 $(target).animateSprite("speed",speed,slow);
+		}
+		var findGif = function(findMe) {
+			for ( var i in $IMAGES ) {
+		 	var name = $IMAGES[i].name;
+			 	if (findMe == name) {
+			 		return $IMAGES[i];
+			 	}
+			 }
+		}
+		
+		var tempoSet = function() {
+			expire = new Date().getTime();
+				//first run resets the total time, the number of beats counted, and the amount of time since last beat
+				if(firstRun > 0.5) {
+					total = new Date().getTime();
+					firstRun = 0;
+					other = 0;
+					count = 0;
+					speed = 1000;
+					$('#bpm').html('Starting...');
+					$('#test').html("Timer started");
+					
+	
+				} else {
+				count = count + 1;
+				other = new Date().getTime();
+				speed = ((other-total)/count);
+				$('#bpm').html( (60/(speed/1000)).toFixed(2) + ' BPM');
+				$(target).animateSprite("speed",speed,slow);
+				}
+				
+			}
+		$("#tempo").mousedown(tempoSet);
+		$(this).keydown(tempoSet);
+
+
+		$("#reset").click(function () {
+			firstRun = 1;
+			speed = 1000;
+			$('#bpm').html('Tempo');
+			$(target).animateSprite("stopAnimation");
+		});
+
+		$("#half").click(function () {
+			firstRun = 1;
+			speed = speed*2;
+			$('#bpm').html((60/(speed/1000)).toFixed(2) + ' BPM');
+			$(target).animateSprite("speed",speed,slow);
+			
+		});
+
+		$("#double").click(function () {
+			firstRun = 1;
+			speed = speed/2;
+			$('#bpm').html((60/(speed/1000)).toFixed(2) + ' BPM');
+
+			$(target).animateSprite("speed",speed,slow);
+			
+		});
+
+		window.setInterval(function(){
+				var rightnow = new Date().getTime();
+				if (expire > 0 && rightnow-expire > 3000) {
+					firstRun = 1;
+				}
+				}, 1000);
+		};
+        </script>
+    </div>
+    </body>
+</html>
